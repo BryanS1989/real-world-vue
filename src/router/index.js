@@ -10,11 +10,12 @@ const router = createRouter({
             path: '/',
             name: 'event-list',
             component: EventListView,
+            props: (route) => ({ page: parseInt(route.query.page) || 1 }),
         },
         {
             path: '/event/:id',
             name: 'event-details',
-            props: true,
+            props: true, // Tells vue router to send route params as component props
             component: EventDetailsView,
         },
         {
