@@ -8,6 +8,7 @@ import { RouterLink, RouterView } from 'vue-router';
             <div class="wrapper">
                 <nav>
                     <RouterLink :to="{ name: 'event-list' }">Events</RouterLink>
+                    |
                     <RouterLink :to="{ name: 'about' }">About</RouterLink>
                 </nav>
             </div>
@@ -17,7 +18,7 @@ import { RouterLink, RouterView } from 'vue-router';
     </div>
 </template>
 
-<style scoped>
+<style>
 #layout {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

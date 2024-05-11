@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import EventService from '@/services/EventService.js';
 
 const props = defineProps({
@@ -7,7 +7,9 @@ const props = defineProps({
         required: true,
     },
 });
+
 const event = ref(null);
+const id = computed(() => props.id);
 
 onMounted(() => {
     /*
@@ -25,9 +27,9 @@ onMounted(() => {
                 "organizer": "Kat Laydee"
             }
     */
-    EventService.getEvent(props.id)
+    EventService.getEvent(id.value)
         .then((response) => {
-            console.log(`event with id(${props.id}): `, response.data);
+            console.log(`event with id(${id.value}): `, response.data);
             event.value = response.data;
         })
         .catch((error) => {
@@ -39,8 +41,24 @@ onMounted(() => {
 <template>
     <div v-if="event">
         <h1>{{ event.title }}</h1>
-        <p>{{ event.time }} on {{ event.date }} @ {{ event.location }}</p>
-        <p>{{ event.description }}</p>
+
+        <nav>
+            <!-- 
+                We do not pass param id (params: {id}) since :id is required for 
+                each child path: if :id is not sent in, vue router will look and
+                use the :id param that is present 
+            -->
+            <!-- /event/2 -->
+            <router-link :to="{ name: 'event-details' }">Details</router-link>
+            |
+            <!-- /event/2/register -->
+            <router-link :to="{ name: 'event-register' }">Register</router-link>
+            |
+            <!-- /event/2/edit -->
+            <router-link :to="{ name: 'event-edit' }">Edit</router-link>
+        </nav>
+
+        <router-view :event="event"></router-view>
     </div>
 </template>
 
