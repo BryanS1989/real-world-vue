@@ -16,7 +16,7 @@ const router = createRouter({
             props: (route) => ({ page: parseInt(route.query.page) || 1 }),
         },
         {
-            path: '/event/:id',
+            path: '/events/:id', // We have rename path '/event/:id' to '/events/:id'
             name: 'event-layout',
             props: true, // Tells vue router to send route params as component props
             component: EventLayout,
@@ -39,9 +39,37 @@ const router = createRouter({
             ],
         },
         {
-            path: '/about',
+            /*
+                Match on /event/, and capture everything else in afterEvents.
+                Using (.*) so that it will include / in the match (by default it doesn't)
+            */
+            path: '/event/:afterEvent(.*)',
+            redirect: (to) => {
+                return { path: `/events/${to.params.afterEvent}` };
+            },
+        },
+        // {
+        //     // We have rename path '/event/:id' to '/events/:id'
+        //     // Then we need to create this route in order to redirect to new path
+        //     path: '/event/:id',
+        //     redirect: (/*to*/) => {
+        //         // param Id is not necessary because vue router will pass it from url automatically
+        //         return { name: 'event-details' /*, params: { id: to.params.id }*/ };
+        //     },
+        //     children: [
+        //         { path: 'register', redirect: () => ({ name: 'event-register' }) },
+        //         { path: 'edit', redirect: () => ({ name: 'event-edit' }) },
+        //     ],
+        // },
+        {
+            path: '/about-us',
             name: 'about',
             component: AboutView,
+            // alias: '/about'      <-- Not recommended by SEO
+        },
+        {
+            path: '/about',
+            redirect: { name: 'about' },
         },
     ],
 });
