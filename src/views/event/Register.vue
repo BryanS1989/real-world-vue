@@ -1,6 +1,8 @@
 <script setup>
 import { useRouter } from 'vue-router';
-const props = defineProps({
+import { inject } from 'vue';
+
+const { event } = defineProps({
     event: {
         required: true,
     },
@@ -8,13 +10,20 @@ const props = defineProps({
 
 const router = useRouter();
 
+const GStore = inject('GStore');
+
 const register = () => {
     // If registration API calls is successful push back to the event details
+
+    GStore.flashMessage = `You are successfully registered for ${event.title}`;
+    setTimeout(() => {
+        GStore.flashMessage = '';
+    }, 3000);
 
     // Navigate the user to this location (Programmatic Navigation)
     router.push({
         name: 'event-details',
-        id: props.event.id,
+        id: event.id,
     });
 
     /*
